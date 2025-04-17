@@ -1,38 +1,33 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AppLayout } from "./components/layout/AppLayout";
 import Dashboard from "./pages/Dashboard";
 import ThreatIntelligence from "./pages/ThreatIntelligence";
 import VulnerabilityManagement from "./pages/VulnerabilityManagement";
-import SecurityScanning from "./pages/SecurityScanning";
 import RemediationPlanning from "./pages/RemediationPlanning";
 import SystemConfiguration from "./pages/SystemConfiguration";
+import SecurityScanning from "./pages/SecurityScanning";
 import NotFound from "./pages/NotFound";
+import Index from "./pages/Index";
+import "./App.css";
 
-const queryClient = new QueryClient();
-
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/threats" element={<ThreatIntelligence />} />
-          <Route path="/vulnerabilities" element={<VulnerabilityManagement />} />
-          <Route path="/scanning" element={<SecurityScanning />} />
-          <Route path="/remediation" element={<RemediationPlanning />} />
-          <Route path="/settings" element={<SystemConfiguration />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route element={<AppLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/threat-intelligence" element={<ThreatIntelligence />} />
+          <Route path="/vulnerability-management" element={<VulnerabilityManagement />} />
+          <Route path="/remediation-planning" element={<RemediationPlanning />} />
+          <Route path="/system-configuration" element={<SystemConfiguration />} />
+          <Route path="/security-scanning" element={<SecurityScanning />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+        </Route>
+      </Routes>
+    </Router>
+  );
+}
 
 export default App;

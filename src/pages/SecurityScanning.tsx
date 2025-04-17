@@ -1,202 +1,363 @@
 
-import AppLayout from "@/components/layout/AppLayout";
+import React, { useState } from 'react';
+import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { Search, Play, AlertTriangle, Shield, Server, Database, Globe, Laptop, Smartphone, Cloud } from "lucide-react";
-import { useState } from "react";
-import { cn } from "@/lib/utils";
+import { CheckCircle, AlertTriangle, XCircle, Play, Pause, RefreshCw, Settings, Shield, List, Grid, ChevronDown } from 'lucide-react';
 
-// Mock scan types
-const scanTypes = [
-  { id: "network", name: "Network Scan", icon: Server, description: "Scan for network vulnerabilities and open ports" },
-  { id: "web", name: "Web Application", icon: Globe, description: "Scan for web application vulnerabilities" },
-  { id: "database", name: "Database", icon: Database, description: "Scan database systems for security issues" },
-  { id: "endpoint", name: "Endpoint", icon: Laptop, description: "Scan endpoint devices and workstations" },
-  { id: "mobile", name: "Mobile Apps", icon: Smartphone, description: "Scan mobile applications for security flaws" },
-  { id: "cloud", name: "Cloud Infrastructure", icon: Cloud, description: "Scan cloud resources and configurations" },
-];
-
-export default function SecurityScanning() {
-  const [selectedScan, setSelectedScan] = useState<string | null>(null);
+const SecurityScanning: React.FC = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
-  const [scanComplete, setScanComplete] = useState(false);
-
-  const handleStartScan = () => {
-    if (!selectedScan) return;
-    
+  const [scanType, setScanType] = useState("vulnerability");
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  
+  const startScan = () => {
     setIsScanning(true);
     setScanProgress(0);
-    setScanComplete(false);
     
     // Simulate scan progress
     const interval = setInterval(() => {
-      setScanProgress((prev) => {
+      setScanProgress(prev => {
         if (prev >= 100) {
           clearInterval(interval);
           setIsScanning(false);
-          setScanComplete(true);
           return 100;
         }
-        return prev + Math.floor(Math.random() * 5) + 1;
+        return prev + 5;
       });
-    }, 300);
+    }, 500);
   };
-
+  
   return (
-    <AppLayout>
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-shield-light-gray">Security Scanning</h1>
-        <p className="text-shield-light-gray/70">Scan your infrastructure for vulnerabilities and security issues</p>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 bg-shield-dark border border-shield-gray rounded-lg shadow-md">
-          <div className="p-4 border-b border-shield-gray">
-            <h2 className="text-lg font-medium text-shield-light-gray">Scan Types</h2>
-          </div>
-          
-          <div className="p-4">
-            <div className="relative mb-4">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-shield-light-gray/50" />
-              <input
-                type="text"
-                placeholder="Search scan types..."
-                className="w-full pl-10 pr-4 py-2 rounded-md bg-shield-gray text-shield-light-gray focus:outline-none focus:ring-1 focus:ring-shield-cyan"
-              />
-            </div>
-            
-            <div className="space-y-2">
-              {scanTypes.map((scan) => (
-                <button
-                  key={scan.id}
-                  onClick={() => setSelectedScan(scan.id)}
-                  className={cn(
-                    "w-full p-3 rounded-md text-left flex items-center transition-colors",
-                    selectedScan === scan.id
-                      ? "bg-shield-gray/50 border border-shield-cyan"
-                      : "hover:bg-shield-gray/30 border border-transparent"
-                  )}
-                >
-                  <div className="bg-shield-darker p-2 rounded-md mr-3">
-                    <scan.icon className="w-5 h-5 text-shield-cyan" />
-                  </div>
-                  <div>
-                    <div className="font-medium">{scan.name}</div>
-                    <div className="text-xs text-shield-light-gray/70">{scan.description}</div>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
+    <div className="p-6 space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold">Security Scanning</h1>
+          <p className="text-muted-foreground">Configure and run security scans against your infrastructure</p>
         </div>
-
-        <div className="lg:col-span-2">
-          <div className="bg-shield-dark border border-shield-gray rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-medium mb-6 text-shield-light-gray flex items-center">
-              <Shield className="w-5 h-5 mr-2 text-shield-cyan" />
-              SHIELD Security Scanner
-            </h2>
-            
-            {!selectedScan ? (
-              <div className="text-center py-12 bg-shield-darker/50 rounded-lg border border-dashed border-shield-gray">
-                <AlertTriangle className="w-12 h-12 text-shield-yellow mx-auto mb-4" />
-                <h3 className="text-lg font-medium mb-2">No Scan Selected</h3>
-                <p className="text-shield-light-gray/70 max-w-md mx-auto">
-                  Select a scan type from the left panel to configure and run a security scan on your infrastructure.
-                </p>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div className="bg-shield-darker p-4 rounded-lg border border-shield-gray">
-                  <h3 className="text-lg font-medium mb-2">
-                    {scanTypes.find(s => s.id === selectedScan)?.name} Configuration
-                  </h3>
+        
+        <div className="flex items-center gap-2">
+          <Button onClick={() => setViewMode('grid')} variant={viewMode === 'grid' ? 'default' : 'outline'} size="icon">
+            <Grid className="h-4 w-4" />
+          </Button>
+          <Button onClick={() => setViewMode('list')} variant={viewMode === 'list' ? 'default' : 'outline'} size="icon">
+            <List className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" className="gap-1">
+            <Settings className="h-4 w-4 mr-1" />
+            Settings
+          </Button>
+        </div>
+      </div>
+      
+      <Separator />
+      
+      <Tabs defaultValue="new-scan" className="w-full">
+        <TabsList>
+          <TabsTrigger value="new-scan">New Scan</TabsTrigger>
+          <TabsTrigger value="scheduled">Scheduled Scans</TabsTrigger>
+          <TabsTrigger value="history">Scan History</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="new-scan" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Start a New Security Scan</CardTitle>
+              <CardDescription>Configure and launch a security scan against your infrastructure</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <FormLabel>Scan Type</FormLabel>
+                    <div className="grid grid-cols-2 gap-4 mt-2">
+                      <Button 
+                        variant={scanType === "vulnerability" ? "default" : "outline"} 
+                        onClick={() => setScanType("vulnerability")}
+                        className="h-20 flex flex-col items-center justify-center"
+                      >
+                        <Shield className="h-6 w-6 mb-2" />
+                        <span>Vulnerability Scan</span>
+                      </Button>
+                      <Button 
+                        variant={scanType === "configuration" ? "default" : "outline"} 
+                        onClick={() => setScanType("configuration")}
+                        className="h-20 flex flex-col items-center justify-center"
+                      >
+                        <Settings className="h-6 w-6 mb-2" />
+                        <span>Configuration Audit</span>
+                      </Button>
+                      <Button 
+                        variant={scanType === "compliance" ? "default" : "outline"} 
+                        onClick={() => setScanType("compliance")}
+                        className="h-20 flex flex-col items-center justify-center"
+                      >
+                        <CheckCircle className="h-6 w-6 mb-2" />
+                        <span>Compliance Check</span>
+                      </Button>
+                      <Button 
+                        variant={scanType === "penetration" ? "default" : "outline"} 
+                        onClick={() => setScanType("penetration")}
+                        className="h-20 flex flex-col items-center justify-center"
+                      >
+                        <AlertTriangle className="h-6 w-6 mb-2" />
+                        <span>Penetration Test</span>
+                      </Button>
+                    </div>
+                  </div>
                   
-                  <div className="space-y-4 mt-4">
-                    <div>
-                      <label className="block text-sm mb-1 text-shield-light-gray/70">Scan Depth</label>
-                      <select className="w-full p-2 rounded-md bg-shield-gray text-shield-light-gray border border-shield-gray focus:outline-none focus:ring-1 focus:ring-shield-cyan">
-                        <option>Quick Scan</option>
-                        <option>Standard Scan</option>
-                        <option>Deep Scan</option>
-                      </select>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm mb-1 text-shield-light-gray/70">Target Scope</label>
-                      <input
-                        type="text"
-                        placeholder="IP, hostname, or URL"
-                        className="w-full p-2 rounded-md bg-shield-gray text-shield-light-gray border border-shield-gray focus:outline-none focus:ring-1 focus:ring-shield-cyan"
-                      />
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <input
-                        type="checkbox"
-                        id="scan-aggressive"
-                        className="rounded bg-shield-gray border-shield-gray text-shield-cyan focus:ring-shield-cyan/30"
-                      />
-                      <label htmlFor="scan-aggressive" className="ml-2 text-sm">
-                        Enable aggressive scanning techniques
-                      </label>
+                  <div>
+                    <FormLabel>Scan Scope</FormLabel>
+                    <div className="grid grid-cols-1 gap-2 mt-2">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline" className="w-full justify-start">
+                            <span>Select Target Systems</span>
+                            <ChevronDown className="ml-auto h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="w-56">
+                          <DropdownMenuItem>Web Application Servers</DropdownMenuItem>
+                          <DropdownMenuItem>Database Cluster</DropdownMenuItem>
+                          <DropdownMenuItem>Authentication Services</DropdownMenuItem>
+                          <DropdownMenuItem>Storage Infrastructure</DropdownMenuItem>
+                          <DropdownMenuItem>API Gateway</DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </div>
                 </div>
                 
-                {isScanning ? (
-                  <div className="bg-shield-darker p-6 rounded-lg border border-shield-blue/50 text-center">
-                    <LoadingSpinner className="mx-auto mb-4" size="lg" color="cyan" />
-                    <h3 className="text-lg font-medium mb-2">Scan in Progress</h3>
-                    <p className="text-shield-light-gray/70 mb-4">
-                      {scanTypes.find(s => s.id === selectedScan)?.name} scan is running...
-                    </p>
-                    <div className="w-full bg-shield-gray/30 rounded-full h-2 mb-2">
-                      <div
-                        className="bg-shield-cyan h-2 rounded-full transition-all duration-300"
-                        style={{ width: `${scanProgress}%` }}
-                      ></div>
-                    </div>
-                    <p className="text-sm text-shield-light-gray/70">{scanProgress}% complete</p>
-                  </div>
-                ) : scanComplete ? (
-                  <div className="bg-shield-darker p-6 rounded-lg border border-shield-green/50 text-center">
-                    <div className="bg-shield-dark/50 w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center">
-                      <Shield className="w-8 h-8 text-shield-green" />
-                    </div>
-                    <h3 className="text-lg font-medium mb-2">Scan Complete</h3>
-                    <p className="text-shield-light-gray/70 mb-6">
-                      {scanTypes.find(s => s.id === selectedScan)?.name} scan has been completed successfully.
-                    </p>
-                    <div className="flex justify-center space-x-3">
-                      <button className="px-4 py-2 bg-shield-blue text-white rounded-md hover:bg-shield-blue/80 transition-colors">
-                        View Results
-                      </button>
-                      <button 
-                        className="px-4 py-2 bg-shield-gray hover:bg-shield-gray/80 rounded-md transition-colors"
-                        onClick={() => {
-                          setSelectedScan(null);
-                          setScanComplete(false);
-                        }}
-                      >
-                        New Scan
-                      </button>
+                <div className="space-y-4">
+                  <div>
+                    <FormLabel>Scan Configuration</FormLabel>
+                    <div className="grid grid-cols-1 gap-2 mt-2">
+                      <Command>
+                        <CommandInput placeholder="Search configuration templates..." />
+                        <CommandList>
+                          <CommandEmpty>No templates found.</CommandEmpty>
+                          <CommandGroup>
+                            <CommandItem>Standard Web Application Scan</CommandItem>
+                            <CommandItem>Database Security Assessment</CommandItem>
+                            <CommandItem>API Security Testing</CommandItem>
+                            <CommandItem>Network Infrastructure Audit</CommandItem>
+                          </CommandGroup>
+                        </CommandList>
+                      </Command>
                     </div>
                   </div>
-                ) : (
-                  <button
-                    onClick={handleStartScan}
-                    className="w-full py-3 px-4 bg-shield-cyan text-shield-darker rounded-md hover:bg-shield-cyan/80 transition-colors flex items-center justify-center"
-                  >
-                    <Play className="w-5 h-5 mr-2" />
-                    Start {scanTypes.find(s => s.id === selectedScan)?.name}
-                  </button>
-                )}
+                  
+                  <div className="space-y-2">
+                    <FormLabel>Advanced Options</FormLabel>
+                    <div className="grid grid-cols-2 gap-2">
+                      <Button variant="outline" className="justify-start">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Scan Depth
+                      </Button>
+                      <Button variant="outline" className="justify-start">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Authentication
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
+              
+              {isScanning ? (
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <div className="text-sm font-medium">Scan Progress</div>
+                    <div className="text-sm text-muted-foreground">{scanProgress}%</div>
+                  </div>
+                  <Progress value={scanProgress} className="h-2" />
+                  
+                  <div className="flex justify-between">
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <LoadingSpinner className="mr-2 h-4 w-4" />
+                      Scanning {scanType} vulnerabilities...
+                    </div>
+                    <Button variant="outline" size="sm" onClick={() => setIsScanning(false)}>
+                      <Pause className="mr-2 h-4 w-4" />
+                      Pause
+                    </Button>
+                  </div>
+                </div>
+              ) : null}
+            </CardContent>
+            <CardFooter className="flex justify-between">
+              <div className="flex items-center text-sm text-muted-foreground">
+                Estimated time: 10-15 minutes
+              </div>
+              {!isScanning ? (
+                <Button onClick={startScan}>
+                  <Play className="mr-2 h-4 w-4" />
+                  Start Scan
+                </Button>
+              ) : (
+                <Button variant="destructive" onClick={() => setIsScanning(false)}>
+                  <XCircle className="mr-2 h-4 w-4" />
+                  Cancel Scan
+                </Button>
+              )}
+            </CardFooter>
+          </Card>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Recent Scan Results</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span>Web Security Scan</span>
+                    <Badge variant="destructive">12 Issues</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>API Security Assessment</span>
+                    <Badge variant="default">3 Issues</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Database Security Check</span>
+                    <Badge variant="secondary">0 Issues</Badge>
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button variant="outline" size="sm" className="w-full">
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Rescan
+                </Button>
+              </CardFooter>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Scan Templates</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span>OWASP Top 10</span>
+                    <Badge>Web</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>PCI Compliance</span>
+                    <Badge>Compliance</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>CIS Benchmarks</span>
+                    <Badge>Configuration</Badge>
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button variant="outline" size="sm" className="w-full">
+                  Manage Templates
+                </Button>
+              </CardFooter>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-lg">Security Tools</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span>OWASP ZAP</span>
+                    <Badge variant="outline">Active</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Metasploit Framework</span>
+                    <Badge variant="outline">Ready</Badge>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>MITRE ATT&CK</span>
+                    <Badge variant="outline">Integrated</Badge>
+                  </div>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Button variant="outline" size="sm" className="w-full">
+                  Configure Tools
+                </Button>
+              </CardFooter>
+            </Card>
           </div>
-        </div>
-      </div>
-    </AppLayout>
+        </TabsContent>
+        
+        <TabsContent value="scheduled" className="space-y-4">
+          <Card>
+            <CardContent className="py-6">
+              <div className="flex items-center justify-center flex-col py-8 text-center">
+                <div className="rounded-full bg-muted p-6 mb-4">
+                  <RefreshCw className="h-10 w-10 text-muted-foreground" />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">No Scheduled Scans</h3>
+                <p className="text-muted-foreground mb-4">Schedule regular scans to monitor your security posture over time</p>
+                <Button>Schedule a Scan</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="history" className="space-y-4">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="space-y-4">
+                {/* Scan history entries */}
+                <div className="flex justify-between items-center border-b pb-4">
+                  <div>
+                    <div className="font-medium">Full Vulnerability Scan</div>
+                    <div className="text-sm text-muted-foreground">Completed 2025-04-16 14:32</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="destructive">8 Critical</Badge>
+                    <Badge variant="default">15 High</Badge>
+                    <Button size="sm" variant="outline">View Report</Button>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center border-b pb-4">
+                  <div>
+                    <div className="font-medium">Configuration Audit</div>
+                    <div className="text-sm text-muted-foreground">Completed 2025-04-14 09:15</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="destructive">3 Critical</Badge>
+                    <Badge variant="default">7 High</Badge>
+                    <Button size="sm" variant="outline">View Report</Button>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center pb-2">
+                  <div>
+                    <div className="font-medium">API Security Assessment</div>
+                    <div className="text-sm text-muted-foreground">Completed 2025-04-12 16:45</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Badge variant="destructive">2 Critical</Badge>
+                    <Badge variant="default">5 High</Badge>
+                    <Button size="sm" variant="outline">View Report</Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
   );
-}
+};
+
+export default SecurityScanning;
