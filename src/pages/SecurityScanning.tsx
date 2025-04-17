@@ -13,12 +13,16 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { CheckCircle, AlertTriangle, XCircle, Play, Pause, RefreshCw, Settings, Shield, List, Grid, ChevronDown } from 'lucide-react';
+import { useForm } from "react-hook-form";
 
 const SecurityScanning: React.FC = () => {
   const [isScanning, setIsScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [scanType, setScanType] = useState("vulnerability");
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  
+  // Add a form instance
+  const form = useForm();
   
   const startScan = () => {
     setIsScanning(true);
@@ -76,100 +80,102 @@ const SecurityScanning: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-4">
-                  <div>
-                    <FormLabel>Scan Type</FormLabel>
-                    <div className="grid grid-cols-2 gap-4 mt-2">
-                      <Button 
-                        variant={scanType === "vulnerability" ? "default" : "outline"} 
-                        onClick={() => setScanType("vulnerability")}
-                        className="h-20 flex flex-col items-center justify-center"
-                      >
-                        <Shield className="h-6 w-6 mb-2" />
-                        <span>Vulnerability Scan</span>
-                      </Button>
-                      <Button 
-                        variant={scanType === "configuration" ? "default" : "outline"} 
-                        onClick={() => setScanType("configuration")}
-                        className="h-20 flex flex-col items-center justify-center"
-                      >
-                        <Settings className="h-6 w-6 mb-2" />
-                        <span>Configuration Audit</span>
-                      </Button>
-                      <Button 
-                        variant={scanType === "compliance" ? "default" : "outline"} 
-                        onClick={() => setScanType("compliance")}
-                        className="h-20 flex flex-col items-center justify-center"
-                      >
-                        <CheckCircle className="h-6 w-6 mb-2" />
-                        <span>Compliance Check</span>
-                      </Button>
-                      <Button 
-                        variant={scanType === "penetration" ? "default" : "outline"} 
-                        onClick={() => setScanType("penetration")}
-                        className="h-20 flex flex-col items-center justify-center"
-                      >
-                        <AlertTriangle className="h-6 w-6 mb-2" />
-                        <span>Penetration Test</span>
-                      </Button>
-                    </div>
+                <Form {...form}>
+                  <div className="space-y-4">
+                    <FormItem>
+                      <FormLabel>Scan Type</FormLabel>
+                      <div className="grid grid-cols-2 gap-4 mt-2">
+                        <Button 
+                          variant={scanType === "vulnerability" ? "default" : "outline"} 
+                          onClick={() => setScanType("vulnerability")}
+                          className="h-20 flex flex-col items-center justify-center"
+                        >
+                          <Shield className="h-6 w-6 mb-2" />
+                          <span>Vulnerability Scan</span>
+                        </Button>
+                        <Button 
+                          variant={scanType === "configuration" ? "default" : "outline"} 
+                          onClick={() => setScanType("configuration")}
+                          className="h-20 flex flex-col items-center justify-center"
+                        >
+                          <Settings className="h-6 w-6 mb-2" />
+                          <span>Configuration Audit</span>
+                        </Button>
+                        <Button 
+                          variant={scanType === "compliance" ? "default" : "outline"} 
+                          onClick={() => setScanType("compliance")}
+                          className="h-20 flex flex-col items-center justify-center"
+                        >
+                          <CheckCircle className="h-6 w-6 mb-2" />
+                          <span>Compliance Check</span>
+                        </Button>
+                        <Button 
+                          variant={scanType === "penetration" ? "default" : "outline"} 
+                          onClick={() => setScanType("penetration")}
+                          className="h-20 flex flex-col items-center justify-center"
+                        >
+                          <AlertTriangle className="h-6 w-6 mb-2" />
+                          <span>Penetration Test</span>
+                        </Button>
+                      </div>
+                    </FormItem>
+                    
+                    <FormItem>
+                      <FormLabel>Scan Scope</FormLabel>
+                      <div className="grid grid-cols-1 gap-2 mt-2">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="w-full justify-start">
+                              <span>Select Target Systems</span>
+                              <ChevronDown className="ml-auto h-4 w-4" />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent className="w-56">
+                            <DropdownMenuItem>Web Application Servers</DropdownMenuItem>
+                            <DropdownMenuItem>Database Cluster</DropdownMenuItem>
+                            <DropdownMenuItem>Authentication Services</DropdownMenuItem>
+                            <DropdownMenuItem>Storage Infrastructure</DropdownMenuItem>
+                            <DropdownMenuItem>API Gateway</DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
+                    </FormItem>
                   </div>
-                  
-                  <div>
-                    <FormLabel>Scan Scope</FormLabel>
-                    <div className="grid grid-cols-1 gap-2 mt-2">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline" className="w-full justify-start">
-                            <span>Select Target Systems</span>
-                            <ChevronDown className="ml-auto h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="w-56">
-                          <DropdownMenuItem>Web Application Servers</DropdownMenuItem>
-                          <DropdownMenuItem>Database Cluster</DropdownMenuItem>
-                          <DropdownMenuItem>Authentication Services</DropdownMenuItem>
-                          <DropdownMenuItem>Storage Infrastructure</DropdownMenuItem>
-                          <DropdownMenuItem>API Gateway</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                  </div>
-                </div>
                 
-                <div className="space-y-4">
-                  <div>
-                    <FormLabel>Scan Configuration</FormLabel>
-                    <div className="grid grid-cols-1 gap-2 mt-2">
-                      <Command>
-                        <CommandInput placeholder="Search configuration templates..." />
-                        <CommandList>
-                          <CommandEmpty>No templates found.</CommandEmpty>
-                          <CommandGroup>
-                            <CommandItem>Standard Web Application Scan</CommandItem>
-                            <CommandItem>Database Security Assessment</CommandItem>
-                            <CommandItem>API Security Testing</CommandItem>
-                            <CommandItem>Network Infrastructure Audit</CommandItem>
-                          </CommandGroup>
-                        </CommandList>
-                      </Command>
-                    </div>
+                  <div className="space-y-4">
+                    <FormItem>
+                      <FormLabel>Scan Configuration</FormLabel>
+                      <div className="grid grid-cols-1 gap-2 mt-2">
+                        <Command>
+                          <CommandInput placeholder="Search configuration templates..." />
+                          <CommandList>
+                            <CommandEmpty>No templates found.</CommandEmpty>
+                            <CommandGroup>
+                              <CommandItem>Standard Web Application Scan</CommandItem>
+                              <CommandItem>Database Security Assessment</CommandItem>
+                              <CommandItem>API Security Testing</CommandItem>
+                              <CommandItem>Network Infrastructure Audit</CommandItem>
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </div>
+                    </FormItem>
+                    
+                    <FormItem>
+                      <FormLabel>Advanced Options</FormLabel>
+                      <div className="grid grid-cols-2 gap-2">
+                        <Button variant="outline" className="justify-start">
+                          <Settings className="mr-2 h-4 w-4" />
+                          Scan Depth
+                        </Button>
+                        <Button variant="outline" className="justify-start">
+                          <Settings className="mr-2 h-4 w-4" />
+                          Authentication
+                        </Button>
+                      </div>
+                    </FormItem>
                   </div>
-                  
-                  <div className="space-y-2">
-                    <FormLabel>Advanced Options</FormLabel>
-                    <div className="grid grid-cols-2 gap-2">
-                      <Button variant="outline" className="justify-start">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Scan Depth
-                      </Button>
-                      <Button variant="outline" className="justify-start">
-                        <Settings className="mr-2 h-4 w-4" />
-                        Authentication
-                      </Button>
-                    </div>
-                  </div>
-                </div>
+                </Form>
               </div>
               
               {isScanning ? (
