@@ -1,14 +1,11 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ArrowRight, ShieldAlert, BarChart, Terminal, AlertCircle, Server, Zap } from 'lucide-react';
-
 const Index: React.FC = () => {
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white">
+  return <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white">
       <div className="container mx-auto px-4 py-12">
         <header className="py-8 mb-12 text-center">
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
@@ -24,7 +21,7 @@ const Index: React.FC = () => {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button variant="outline" size="lg" className="border-gray-600 text-gray-300 hover:bg-gray-800">
+            <Button variant="outline" size="lg" className="border-gray-600 text-gray-300 bg-zinc-800 hover:bg-zinc-700">
               View Documentation
             </Button>
           </div>
@@ -150,8 +147,6 @@ const Index: React.FC = () => {
           <p className="text-xs mt-2">© 2025 SHIELD Team. All rights reserved.</p>
         </footer>
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
