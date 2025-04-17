@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -55,7 +56,7 @@
     --sidebar-accent-foreground: 240 5.9% 10%,
     --sidebar-border: 220 13% 91%,
     --sidebar-ring: 217.2 91.2% 59.8%,
-    --dummy-var: 0 0% 0% /* Add a dummy variable to ensure the last line has a comma */
+    --dummy-var: 0 0% 0% /* Ensure last line has a comma */
   }
 
   .dark {
@@ -87,7 +88,7 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%,
     --sidebar-border: 240 3.7% 15.9%,
     --sidebar-ring: 217.2 91.2% 59.8%,
-    --dummy-var: 0 0% 0% /* Add a dummy variable to ensure the last line has a comma */
+    --dummy-var: 0 0% 0% /* Ensure last line has a comma */
   }
 }
 
@@ -100,3 +101,4 @@
     @apply bg-background text-foreground;
   }
 }
+
