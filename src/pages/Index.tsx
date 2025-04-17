@@ -4,10 +4,12 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ArrowRight, ShieldAlert, BarChart, Terminal, AlertCircle, Server, Zap } from 'lucide-react';
+
 const Index: React.FC = () => {
-  return <div className="min-h-screen bg-gradient-to-b from-black to-gray-900 text-white">
-      <div className="container mx-auto px-4 py-12">
-        <header className="py-8 mb-12 text-center">
+  return (
+    <div className="min-h-screen w-full bg-gradient-to-b from-black to-gray-900 text-white">
+      <div className="w-full max-w-[1400px] mx-auto px-4 py-12">
+        <header className="w-full py-8 mb-12 text-center">
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">SHIELD</span>
           </h1>
@@ -27,7 +29,7 @@ const Index: React.FC = () => {
           </div>
         </header>
 
-        <Alert className="mb-8 bg-yellow-900/30 border border-yellow-800 text-yellow-300">
+        <Alert className="w-full mb-8 bg-yellow-900/30 border border-yellow-800 text-yellow-300">
           <AlertCircle className="h-4 w-4" />
           <AlertTitle>Hackathon Project</AlertTitle>
           <AlertDescription>
@@ -35,8 +37,8 @@ const Index: React.FC = () => {
           </AlertDescription>
         </Alert>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-          <Card className="bg-gray-800 border-gray-700">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12 w-full">
+          <Card className="w-full bg-gray-800 border-gray-700">
             <CardHeader>
               <ShieldAlert className="h-8 w-8 text-blue-400 mb-2" />
               <CardTitle>Threat Intelligence</CardTitle>
@@ -57,7 +59,7 @@ const Index: React.FC = () => {
             </CardFooter>
           </Card>
 
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="w-full bg-gray-800 border-gray-700">
             <CardHeader>
               <Terminal className="h-8 w-8 text-cyan-400 mb-2" />
               <CardTitle>Vulnerability Management</CardTitle>
@@ -78,7 +80,7 @@ const Index: React.FC = () => {
             </CardFooter>
           </Card>
 
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="w-full bg-gray-800 border-gray-700">
             <CardHeader>
               <BarChart className="h-8 w-8 text-green-400 mb-2" />
               <CardTitle>Remediation Planning</CardTitle>
@@ -99,7 +101,7 @@ const Index: React.FC = () => {
             </CardFooter>
           </Card>
 
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="w-full bg-gray-800 border-gray-700">
             <CardHeader>
               <Zap className="h-8 w-8 text-purple-400 mb-2" />
               <CardTitle>Security Scanning</CardTitle>
@@ -120,7 +122,7 @@ const Index: React.FC = () => {
             </CardFooter>
           </Card>
 
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="w-full bg-gray-800 border-gray-700">
             <CardHeader>
               <Server className="h-8 w-8 text-orange-400 mb-2" />
               <CardTitle>System Configuration</CardTitle>
@@ -142,11 +144,13 @@ const Index: React.FC = () => {
           </Card>
         </div>
 
-        <footer className="text-center text-gray-500 mt-20">
+        <footer className="w-full text-center text-gray-500 mt-20">
           <p className="text-sm">SHIELD - Developed for the Cybersecurity Innovation Hackathon 2025</p>
           <p className="text-xs mt-2">© 2025 SHIELD Team. All rights reserved.</p>
         </footer>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
