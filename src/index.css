@@ -4,6 +4,27 @@
 
 @layer base {
   :root {
+    /* Adding custom keyframes for cybersecurity animations */
+    @keyframes pulse-glow {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
+    }
+
+    @keyframes data-flow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 100% 50%; }
+    }
+
+    @keyframes scanner {
+      0% { transform: translateY(0); opacity: 0.5; }
+      50% { transform: translateY(100px); opacity: 1; }
+      100% { transform: translateY(0); opacity: 0.5; }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 

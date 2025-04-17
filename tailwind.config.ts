@@ -19,6 +19,19 @@ export default {
 		},
 		extend: {
 			colors: {
+				shield: {
+					dark: '#0A1929',
+					darker: '#050E1A',
+					darkest: '#030A12',
+					cyan: '#00E5FF',
+					blue: '#0288D1',
+					red: '#FF3D00',
+					green: '#00C853',
+					yellow: '#FFD600',
+					gray: '#263238',
+					'light-gray': '#E0E0E0'
+				},
+			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
