@@ -19,16 +19,16 @@ interface SidebarProps {
 }
 
 const navItems = [
-  { to: "/", icon: LayoutDashboard, label: "Executive Dashboard" },
-  { to: "/threats", icon: Shield, label: "Threat Intelligence" },
-  { to: "/vulnerabilities", icon: AlertTriangle, label: "Vulnerability Management" },
-  { to: "/scanning", icon: FileSearch, label: "Security Scanning" },
-  { to: "/remediation", icon: Hammer, label: "Remediation Planning" },
+  { to: "/dashboard", icon: LayoutDashboard, label: "Executive Dashboard" },
+  { to: "/threat-intelligence", icon: Shield, label: "Threat Intelligence" },
+  { to: "/vulnerability-management", icon: AlertTriangle, label: "Vulnerability Management" },
+  { to: "/security-scanning", icon: FileSearch, label: "Security Scanning" },
+  { to: "/remediation-planning", icon: Hammer, label: "Remediation Planning" },
   { to: "/assets", icon: Database, label: "Asset Inventory" },
   { to: "/analytics", icon: BarChart3, label: "Security Analytics" },
   { to: "/users", icon: Users, label: "User Management" },
   { to: "/console", icon: Terminal, label: "Command Console" },
-  { to: "/settings", icon: Settings, label: "System Configuration" },
+  { to: "/system-configuration", icon: Settings, label: "System Configuration" },
 ];
 
 export default function Sidebar({ open }: SidebarProps) {

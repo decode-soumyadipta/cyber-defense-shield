@@ -1,6 +1,6 @@
 
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AppLayout from "./components/layout/AppLayout";  // Change to default import
+import AppLayout from "./components/layout/AppLayout";  // Using default import
 import Dashboard from "./pages/Dashboard";
 import ThreatIntelligence from "./pages/ThreatIntelligence";
 import VulnerabilityManagement from "./pages/VulnerabilityManagement";
