@@ -1,19 +1,18 @@
-
 import React, { useState } from 'react';
-import { Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { CheckCircle, AlertTriangle, XCircle, Play, Pause, RefreshCw, Settings, Shield, List, Grid, ChevronDown } from 'lucide-react';
+import { Form } from "@/components/ui/form";
+import { RefreshCw, Play, XCircle, Settings, List, Grid } from 'lucide-react';
 import { useForm } from "react-hook-form";
+
+import { ScanTypeSelector } from "@/components/security-scanning/ScanTypeSelector";
+import { ScanScope } from "@/components/security-scanning/ScanScope";
+import { ScanConfiguration } from "@/components/security-scanning/ScanConfiguration";
+import { ScanProgress } from "@/components/security-scanning/ScanProgress";
+import { RecentScans } from "@/components/security-scanning/RecentScans";
 
 const SecurityScanning: React.FC = () => {
   const [isScanning, setIsScanning] = useState(false);
@@ -21,14 +20,12 @@ const SecurityScanning: React.FC = () => {
   const [scanType, setScanType] = useState("vulnerability");
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
-  // Add a form instance
   const form = useForm();
   
   const startScan = () => {
     setIsScanning(true);
     setScanProgress(0);
     
-    // Simulate scan progress
     const interval = setInterval(() => {
       setScanProgress(prev => {
         if (prev >= 100) {
@@ -40,7 +37,7 @@ const SecurityScanning: React.FC = () => {
       });
     }, 500);
   };
-  
+
   return (
     <div className="p-6 space-y-6">
       <div className="flex justify-between items-center">
@@ -82,122 +79,20 @@ const SecurityScanning: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Form {...form}>
                   <div className="space-y-4">
-                    <FormItem>
-                      <FormLabel>Scan Type</FormLabel>
-                      <div className="grid grid-cols-2 gap-4 mt-2">
-                        <Button 
-                          variant={scanType === "vulnerability" ? "default" : "outline"} 
-                          onClick={() => setScanType("vulnerability")}
-                          className="h-20 flex flex-col items-center justify-center"
-                        >
-                          <Shield className="h-6 w-6 mb-2" />
-                          <span>Vulnerability Scan</span>
-                        </Button>
-                        <Button 
-                          variant={scanType === "configuration" ? "default" : "outline"} 
-                          onClick={() => setScanType("configuration")}
-                          className="h-20 flex flex-col items-center justify-center"
-                        >
-                          <Settings className="h-6 w-6 mb-2" />
-                          <span>Configuration Audit</span>
-                        </Button>
-                        <Button 
-                          variant={scanType === "compliance" ? "default" : "outline"} 
-                          onClick={() => setScanType("compliance")}
-                          className="h-20 flex flex-col items-center justify-center"
-                        >
-                          <CheckCircle className="h-6 w-6 mb-2" />
-                          <span>Compliance Check</span>
-                        </Button>
-                        <Button 
-                          variant={scanType === "penetration" ? "default" : "outline"} 
-                          onClick={() => setScanType("penetration")}
-                          className="h-20 flex flex-col items-center justify-center"
-                        >
-                          <AlertTriangle className="h-6 w-6 mb-2" />
-                          <span>Penetration Test</span>
-                        </Button>
-                      </div>
-                    </FormItem>
-                    
-                    <FormItem>
-                      <FormLabel>Scan Scope</FormLabel>
-                      <div className="grid grid-cols-1 gap-2 mt-2">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="w-full justify-start">
-                              <span>Select Target Systems</span>
-                              <ChevronDown className="ml-auto h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent className="w-56">
-                            <DropdownMenuItem>Web Application Servers</DropdownMenuItem>
-                            <DropdownMenuItem>Database Cluster</DropdownMenuItem>
-                            <DropdownMenuItem>Authentication Services</DropdownMenuItem>
-                            <DropdownMenuItem>Storage Infrastructure</DropdownMenuItem>
-                            <DropdownMenuItem>API Gateway</DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </div>
-                    </FormItem>
+                    <ScanTypeSelector scanType={scanType} onScanTypeChange={setScanType} />
+                    <ScanScope />
                   </div>
-                
-                  <div className="space-y-4">
-                    <FormItem>
-                      <FormLabel>Scan Configuration</FormLabel>
-                      <div className="grid grid-cols-1 gap-2 mt-2">
-                        <Command>
-                          <CommandInput placeholder="Search configuration templates..." />
-                          <CommandList>
-                            <CommandEmpty>No templates found.</CommandEmpty>
-                            <CommandGroup>
-                              <CommandItem>Standard Web Application Scan</CommandItem>
-                              <CommandItem>Database Security Assessment</CommandItem>
-                              <CommandItem>API Security Testing</CommandItem>
-                              <CommandItem>Network Infrastructure Audit</CommandItem>
-                            </CommandGroup>
-                          </CommandList>
-                        </Command>
-                      </div>
-                    </FormItem>
-                    
-                    <FormItem>
-                      <FormLabel>Advanced Options</FormLabel>
-                      <div className="grid grid-cols-2 gap-2">
-                        <Button variant="outline" className="justify-start">
-                          <Settings className="mr-2 h-4 w-4" />
-                          Scan Depth
-                        </Button>
-                        <Button variant="outline" className="justify-start">
-                          <Settings className="mr-2 h-4 w-4" />
-                          Authentication
-                        </Button>
-                      </div>
-                    </FormItem>
-                  </div>
+                  <ScanConfiguration />
                 </Form>
               </div>
               
-              {isScanning ? (
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm font-medium">Scan Progress</div>
-                    <div className="text-sm text-muted-foreground">{scanProgress}%</div>
-                  </div>
-                  <Progress value={scanProgress} className="h-2" />
-                  
-                  <div className="flex justify-between">
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <LoadingSpinner className="mr-2 h-4 w-4" />
-                      Scanning {scanType} vulnerabilities...
-                    </div>
-                    <Button variant="outline" size="sm" onClick={() => setIsScanning(false)}>
-                      <Pause className="mr-2 h-4 w-4" />
-                      Pause
-                    </Button>
-                  </div>
-                </div>
-              ) : null}
+              {isScanning && (
+                <ScanProgress 
+                  progress={scanProgress} 
+                  scanType={scanType} 
+                  onPauseScan={() => setIsScanning(false)} 
+                />
+              )}
             </CardContent>
             <CardFooter className="flex justify-between">
               <div className="flex items-center text-sm text-muted-foreground">
@@ -218,6 +113,8 @@ const SecurityScanning: React.FC = () => {
           </Card>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <RecentScans />
+            
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-lg">Recent Scan Results</CardTitle>
@@ -321,7 +218,6 @@ const SecurityScanning: React.FC = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-4">
-                {/* Scan history entries */}
                 <div className="flex justify-between items-center border-b pb-4">
                   <div>
                     <div className="font-medium">Full Vulnerability Scan</div>
